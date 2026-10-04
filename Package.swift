@@ -10,7 +10,7 @@
 import Foundation
 import PackageDescription
 
-let supportedNativePlatforms: [Platform] = [.macOS, .windows]
+let supportedNativePlatforms: [Platform] = [.macOS, .windows, .linux]
 let wasmPlatforms: [Platform] = [.wasi]
 
 let swanLocalDawnPath: String? = ProcessInfo.processInfo.environment["SWAN_LOCAL_DAWN"].flatMap { $0.isEmpty ? nil : $0 }
