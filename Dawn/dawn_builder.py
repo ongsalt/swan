@@ -191,6 +191,7 @@ def cmake_flags(target_config: TargetConfig) -> List[str]:
     if target_config.os == OS.LINUX:
         # CMake cannot scan module dependencies with the Linux GCC toolchain.
         flags.append("-DDAWN_SUPPORTS_CXX_MODULES=OFF")
+        flags.append("-DDAWN_USE_WAYLAND=ON")
 
     if target_config.os.is_apple():
         flags.append(
