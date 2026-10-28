@@ -10,7 +10,7 @@ import DawnData
 extension DawnDefaultValue {
 	// Get the default value for a type as represented by this default value record
 	func defaultValueForType(_ type: Name, data: DawnData) throws -> String {
-		let floatRegex = /^(\d+)\.f$/
+		let floatRegex = /^(\d+)(?:\.f)?$/
 
 		switch self {
 		case .double(let value):

@@ -43,6 +43,12 @@ extension DawnData {
 			if entity.hasTag("emscripten") {
 				continue
 			}
+			// Skip the Dawn cache API: its callbacks take byte buffers and return values, which the generator doesn't support yet
+			if name.raw.hasPrefix("dawn load cache data callback") || name.raw.hasPrefix("dawn store cache data callback")
+				|| name.raw == "dawn cache device descriptor"
+			{
+				continue
+			}
 
 			switch entity {
 			case .alias(let alias):
