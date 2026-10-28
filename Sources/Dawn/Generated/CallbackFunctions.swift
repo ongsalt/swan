@@ -8,6 +8,8 @@ public typealias GPUCreateRenderPipelineAsyncCallback = (GPUCreatePipelineAsyncS
 
 public typealias GPUDeviceLostCallback = (UnsafePointer<GPUDevice?>?, GPUDeviceLostReason, String?) -> Void
 
+public typealias GPUDisposeCallback = (GPUCallbackStatus) -> Void
+
 public typealias GPULoggingCallback = (GPULoggingType, String?) -> Void
 
 public typealias GPUPopErrorScopeCallback = (GPUPopErrorScopeStatus, GPUErrorType, String?) -> Void

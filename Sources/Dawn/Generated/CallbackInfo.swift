@@ -224,6 +224,46 @@ public struct GPUDeviceLostCallbackInfo: GPUStruct {
 	}
 }
 
+extension WGPUDisposeCallbackInfo: WGPUStruct {
+}
+
+public struct GPUDisposeCallbackInfo: GPUStruct {
+	public typealias WGPUType = WGPUDisposeCallbackInfo
+
+	public let mode: GPUCallbackMode
+	public let callback: GPUDisposeCallback
+
+	public init(mode: GPUCallbackMode = .waitAnyOnly, callback: @escaping GPUDisposeCallback) {
+		self.mode = mode
+		self.callback = callback
+	}
+
+	public func withWGPUStruct<R>(
+		_ lambda: (inout WGPUDisposeCallbackInfo) -> R
+	) -> R {
+		{
+			let wgpuCallback: WGPUDisposeCallback = {
+				(_ status: WGPUCallbackStatus, _ userdata1: UnsafeMutableRawPointer?, _ userdata2: UnsafeMutableRawPointer?)
+				in
+
+				assert(userdata1 != nil)
+				let unmanagedCallback = Unmanaged<AnyObject>.fromOpaque(userdata1!)
+				let callback = unmanagedCallback.takeUnretainedValue() as! GPUDisposeCallback
+				callback(status)
+
+			}
+			var wgpuStruct = WGPUDisposeCallbackInfo(
+				nextInChain: nil,
+				mode: mode,
+				callback: wgpuCallback,
+				userdata1: Unmanaged.passRetained(callback as AnyObject).toOpaque(),
+				userdata2: nil
+			)
+			return lambda(&wgpuStruct)
+		}()
+	}
+}
+
 extension WGPULoggingCallbackInfo: WGPUStruct {
 }
 

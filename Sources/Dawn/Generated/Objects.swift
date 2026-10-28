@@ -183,11 +183,10 @@ extension GPUCommandEncoder {
 		}
 	}
 
-	public func writeBuffer(buffer: GPUBuffer, bufferOffset: UInt64, data: [UInt8]?) -> Void {
-		let size = UInt64(data?.count ?? 0)
-		withWGPUArrayPointer(data) { data in
-			writeBuffer(buffer: buffer, bufferOffset: bufferOffset, data: data, size: size)
-		}
+	public func writeBuffer(buffer: GPUBuffer, bufferOffset: UInt64, data: UnsafeRawBufferPointer) -> Void {
+		let size = data.count
+		let data = data.baseAddress
+		writeBuffer(buffer: buffer, bufferOffset: bufferOffset, data: data, size: size)
 	}
 
 	public func setLabel(label: String) -> Void {
@@ -289,6 +288,12 @@ extension GPUDevice {
 		}
 	}
 
+	public func createErrorComputePipeline(label: String) -> GPUComputePipeline {
+		return label.withWGPUStruct { label in
+			createErrorComputePipeline(label: label)
+		}
+	}
+
 	public func createComputePipelineAsync(
 		descriptor: GPUComputePipelineDescriptor,
 		callbackInfo: GPUCreateComputePipelineAsyncCallbackInfo
@@ -338,6 +343,12 @@ extension GPUDevice {
 	public func createRenderPipeline(descriptor: GPURenderPipelineDescriptor) -> GPURenderPipeline {
 		return descriptor.withWGPUPointer { descriptor in
 			createRenderPipeline(descriptor: descriptor)
+		}
+	}
+
+	public func createErrorRenderPipeline(label: String) -> GPURenderPipeline {
+		return label.withWGPUStruct { label in
+			createErrorRenderPipeline(label: label)
 		}
 	}
 
@@ -760,15 +771,21 @@ extension GPURenderPipeline {
 public typealias GPUResourceTable = WGPUResourceTable
 
 extension GPUResourceTable {
+	public func setLabel(label: String) -> Void {
+		label.withWGPUStruct { label in
+			setLabel(label: label)
+		}
+	}
+
 	public func update(slot: UInt32, resource: GPUBindingResource) -> GPUStatus {
 		return resource.withWGPUPointer { resource in
 			update(slot: slot, resource: resource)
 		}
 	}
 
-	public func insertBinding(resource: GPUBindingResource) -> UInt32 {
+	public func insert(resource: GPUBindingResource) -> UInt32 {
 		return resource.withWGPUPointer { resource in
-			insertBinding(resource: resource)
+			insert(resource: resource)
 		}
 	}
 

@@ -121,11 +121,20 @@ public struct GPUAdapterPropertiesD3D: GPUChainedStruct {
 	public typealias WGPUType = WGPUAdapterPropertiesD3D
 	public let sType: GPUSType = .adapterPropertiesD3D
 	public var shaderModel: UInt32
+	public var adapterLUIDLowPart: UInt32
+	public var adapterLUIDHighPart: UInt32
 
 	public var nextInChain: (any GPUChainedStruct)? = nil
 
-	public init(shaderModel: UInt32 = 0, nextInChain: (any GPUChainedStruct)? = nil) {
+	public init(
+		shaderModel: UInt32 = 0,
+		adapterLUIDLowPart: UInt32 = 0,
+		adapterLUIDHighPart: UInt32 = 0,
+		nextInChain: (any GPUChainedStruct)? = nil
+	) {
 		self.shaderModel = shaderModel
+		self.adapterLUIDLowPart = adapterLUIDLowPart
+		self.adapterLUIDHighPart = adapterLUIDHighPart
 		self.nextInChain = nextInChain
 	}
 
@@ -136,14 +145,18 @@ public struct GPUAdapterPropertiesD3D: GPUChainedStruct {
 			if nextInChain == nil {
 				var wgpuStruct = WGPUAdapterPropertiesD3D(
 					chain: WGPUChainedStruct(next: nil, sType: sType),
-					shaderModel: shaderModel
+					shaderModel: shaderModel,
+					adapterLUIDLowPart: adapterLUIDLowPart,
+					adapterLUIDHighPart: adapterLUIDHighPart
 				)
 				return lambda(&wgpuStruct)
 			} else {
 				return nextInChain!.withNextInChain() { pointer in
 					var wgpuStruct = WGPUAdapterPropertiesD3D(
 						chain: WGPUChainedStruct(next: pointer, sType: sType),
-						shaderModel: shaderModel
+						shaderModel: shaderModel,
+						adapterLUIDLowPart: adapterLUIDLowPart,
+						adapterLUIDHighPart: adapterLUIDHighPart
 					)
 					return lambda(&wgpuStruct)
 				}
@@ -262,57 +275,6 @@ public struct GPUAdapterPropertiesDrm: GPUChainedStruct {
 	}
 }
 
-extension WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs: ChainedStruct {
-}
-
-public struct GPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs: GPUChainedStruct {
-	public typealias WGPUType = WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs
-	public let sType: GPUSType = .adapterPropertiesExplicitComputeSubgroupSizeConfigs
-	public var minExplicitComputeSubgroupSize: UInt32
-	public var maxExplicitComputeSubgroupSize: UInt32
-	public var maxComputeWorkgroupSubgroups: UInt32
-
-	public var nextInChain: (any GPUChainedStruct)? = nil
-
-	public init(
-		minExplicitComputeSubgroupSize: UInt32 = 0,
-		maxExplicitComputeSubgroupSize: UInt32 = 0,
-		maxComputeWorkgroupSubgroups: UInt32 = 0,
-		nextInChain: (any GPUChainedStruct)? = nil
-	) {
-		self.minExplicitComputeSubgroupSize = minExplicitComputeSubgroupSize
-		self.maxExplicitComputeSubgroupSize = maxExplicitComputeSubgroupSize
-		self.maxComputeWorkgroupSubgroups = maxComputeWorkgroupSubgroups
-		self.nextInChain = nextInChain
-	}
-
-	public func withWGPUStruct<R>(
-		_ lambda: (inout WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs) -> R
-	) -> R {
-		return {
-			if nextInChain == nil {
-				var wgpuStruct = WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs(
-					chain: WGPUChainedStruct(next: nil, sType: sType),
-					minExplicitComputeSubgroupSize: minExplicitComputeSubgroupSize,
-					maxExplicitComputeSubgroupSize: maxExplicitComputeSubgroupSize,
-					maxComputeWorkgroupSubgroups: maxComputeWorkgroupSubgroups
-				)
-				return lambda(&wgpuStruct)
-			} else {
-				return nextInChain!.withNextInChain() { pointer in
-					var wgpuStruct = WGPUAdapterPropertiesExplicitComputeSubgroupSizeConfigs(
-						chain: WGPUChainedStruct(next: pointer, sType: sType),
-						minExplicitComputeSubgroupSize: minExplicitComputeSubgroupSize,
-						maxExplicitComputeSubgroupSize: maxExplicitComputeSubgroupSize,
-						maxComputeWorkgroupSubgroups: maxComputeWorkgroupSubgroups
-					)
-					return lambda(&wgpuStruct)
-				}
-			}
-		}()
-	}
-}
-
 extension WGPUAdapterPropertiesMemoryHeaps: ChainedStruct {
 }
 
@@ -347,49 +309,6 @@ public struct GPUAdapterPropertiesMemoryHeaps: GPUChainedStruct {
 							chain: WGPUChainedStruct(next: pointer, sType: sType),
 							heapCount: heapCount,
 							heapInfo: heapInfo
-						)
-						return lambda(&wgpuStruct)
-					}
-				}
-			}()
-		}
-	}
-}
-
-extension WGPUAdapterPropertiesSubgroupMatrixConfigs: ChainedStruct {
-}
-
-public struct GPUAdapterPropertiesSubgroupMatrixConfigs: GPUChainedStruct {
-	public typealias WGPUType = WGPUAdapterPropertiesSubgroupMatrixConfigs
-	public let sType: GPUSType = .adapterPropertiesSubgroupMatrixConfigs
-	public var configs: [GPUSubgroupMatrixConfig]
-
-	public var nextInChain: (any GPUChainedStruct)? = nil
-
-	public init(configs: [GPUSubgroupMatrixConfig] = [], nextInChain: (any GPUChainedStruct)? = nil) {
-		self.configs = configs
-		self.nextInChain = nextInChain
-	}
-
-	public func withWGPUStruct<R>(
-		_ lambda: (inout WGPUAdapterPropertiesSubgroupMatrixConfigs) -> R
-	) -> R {
-		let configCount = configs.count
-		return withWGPUArrayPointer(configs) { configs in
-			return {
-				if nextInChain == nil {
-					var wgpuStruct = WGPUAdapterPropertiesSubgroupMatrixConfigs(
-						chain: WGPUChainedStruct(next: nil, sType: sType),
-						configCount: configCount,
-						configs: configs
-					)
-					return lambda(&wgpuStruct)
-				} else {
-					return nextInChain!.withNextInChain() { pointer in
-						var wgpuStruct = WGPUAdapterPropertiesSubgroupMatrixConfigs(
-							chain: WGPUChainedStruct(next: pointer, sType: sType),
-							configCount: configCount,
-							configs: configs
 						)
 						return lambda(&wgpuStruct)
 					}
@@ -849,6 +768,7 @@ public struct GPUColorSpaceDawn: GPURootStruct {
 	public var transfer: GPUColorSpaceTransferDawn
 	public var yCbCrRange: GPUColorSpaceYCbCrRangeDawn
 	public var yCbCrMatrix: GPUColorSpaceYCbCrMatrixDawn
+	public var hdrReferenceWhiteLuminance: Float
 
 	public var nextInChain: (any GPUChainedStruct)? = nil
 
@@ -857,12 +777,14 @@ public struct GPUColorSpaceDawn: GPURootStruct {
 		transfer: GPUColorSpaceTransferDawn = .identity,
 		yCbCrRange: GPUColorSpaceYCbCrRangeDawn = .identity,
 		yCbCrMatrix: GPUColorSpaceYCbCrMatrixDawn = .identity,
+		hdrReferenceWhiteLuminance: Float = 0.0,
 		nextInChain: (any GPUChainedStruct)? = nil
 	) {
 		self.primaries = primaries
 		self.transfer = transfer
 		self.yCbCrRange = yCbCrRange
 		self.yCbCrMatrix = yCbCrMatrix
+		self.hdrReferenceWhiteLuminance = hdrReferenceWhiteLuminance
 		self.nextInChain = nextInChain
 	}
 
@@ -875,7 +797,8 @@ public struct GPUColorSpaceDawn: GPURootStruct {
 				primaries: primaries,
 				transfer: transfer,
 				yCbCrRange: yCbCrRange,
-				yCbCrMatrix: yCbCrMatrix
+				yCbCrMatrix: yCbCrMatrix,
+				hdrReferenceWhiteLuminance: hdrReferenceWhiteLuminance
 			)
 			return lambda(&wgpuStruct)
 		}
@@ -1518,64 +1441,6 @@ public struct DawnBufferDescriptorErrorInfoFromWireClient: GPUChainedStruct {
 	}
 }
 
-extension WGPUDawnCacheDeviceDescriptor: ChainedStruct {
-}
-
-public struct DawnCacheDeviceDescriptor: GPUChainedStruct {
-	public typealias WGPUType = WGPUDawnCacheDeviceDescriptor
-	public let sType: GPUSType = .dawnCacheDeviceDescriptor
-	public var isolationKey: String
-	public var loadDataFunction: DawnLoadCacheDataFunction?
-	public var storeDataFunction: DawnStoreCacheDataFunction?
-	public var functionUserdata: UnsafeMutableRawPointer?
-
-	public var nextInChain: (any GPUChainedStruct)? = nil
-
-	public init(
-		isolationKey: String = "",
-		loadDataFunction: DawnLoadCacheDataFunction? = nil,
-		storeDataFunction: DawnStoreCacheDataFunction? = nil,
-		functionUserdata: UnsafeMutableRawPointer? = nil,
-		nextInChain: (any GPUChainedStruct)? = nil
-	) {
-		self.isolationKey = isolationKey
-		self.loadDataFunction = loadDataFunction
-		self.storeDataFunction = storeDataFunction
-		self.functionUserdata = functionUserdata
-		self.nextInChain = nextInChain
-	}
-
-	public func withWGPUStruct<R>(
-		_ lambda: (inout WGPUDawnCacheDeviceDescriptor) -> R
-	) -> R {
-		return isolationKey.withWGPUStruct { isolationKey in
-			{
-				if nextInChain == nil {
-					var wgpuStruct = WGPUDawnCacheDeviceDescriptor(
-						chain: WGPUChainedStruct(next: nil, sType: sType),
-						isolationKey: isolationKey,
-						loadDataFunction: loadDataFunction,
-						storeDataFunction: storeDataFunction,
-						functionUserdata: functionUserdata
-					)
-					return lambda(&wgpuStruct)
-				} else {
-					return nextInChain!.withNextInChain() { pointer in
-						var wgpuStruct = WGPUDawnCacheDeviceDescriptor(
-							chain: WGPUChainedStruct(next: pointer, sType: sType),
-							isolationKey: isolationKey,
-							loadDataFunction: loadDataFunction,
-							storeDataFunction: storeDataFunction,
-							functionUserdata: functionUserdata
-						)
-						return lambda(&wgpuStruct)
-					}
-				}
-			}()
-		}
-	}
-}
-
 extension WGPUDawnConsumeAdapterDescriptor: ChainedStruct {
 }
 
@@ -2017,6 +1882,49 @@ public struct DawnShaderModuleSPIRVOptionsDescriptor: GPUChainedStruct {
 				}
 			}()
 		}()
+	}
+}
+
+extension WGPUDawnShaderSourceSPIRV: ChainedStruct {
+}
+
+public struct DawnShaderSourceSPIRV: GPUChainedStruct {
+	public typealias WGPUType = WGPUDawnShaderSourceSPIRV
+	public let sType: GPUSType = .dawnShaderSourceSPIRV
+	public var code: [UInt32]?
+
+	public var nextInChain: (any GPUChainedStruct)? = nil
+
+	public init(code: [UInt32]? = [], nextInChain: (any GPUChainedStruct)? = nil) {
+		self.code = code
+		self.nextInChain = nextInChain
+	}
+
+	public func withWGPUStruct<R>(
+		_ lambda: (inout WGPUDawnShaderSourceSPIRV) -> R
+	) -> R {
+		let codeSize = code?.count ?? 0
+		return withWGPUArrayPointer(code) { code in
+			{
+				if nextInChain == nil {
+					var wgpuStruct = WGPUDawnShaderSourceSPIRV(
+						chain: WGPUChainedStruct(next: nil, sType: sType),
+						codeSize: codeSize,
+						code: code
+					)
+					return lambda(&wgpuStruct)
+				} else {
+					return nextInChain!.withNextInChain() { pointer in
+						var wgpuStruct = WGPUDawnShaderSourceSPIRV(
+							chain: WGPUChainedStruct(next: pointer, sType: sType),
+							codeSize: codeSize,
+							code: code
+						)
+						return lambda(&wgpuStruct)
+					}
+				}
+			}()
+		}
 	}
 }
 
@@ -3366,6 +3274,47 @@ public struct GPURenderBundleEncoderDescriptor: GPURootStruct {
 	}
 }
 
+extension WGPURenderBundleEncoderResourceTable: ChainedStruct {
+}
+
+public struct GPURenderBundleEncoderResourceTable: GPUChainedStruct {
+	public typealias WGPUType = WGPURenderBundleEncoderResourceTable
+	public let sType: GPUSType = .renderBundleEncoderResourceTable
+	public var usesResourceTable: Bool
+
+	public var nextInChain: (any GPUChainedStruct)? = nil
+
+	public init(usesResourceTable: Bool = false, nextInChain: (any GPUChainedStruct)? = nil) {
+		self.usesResourceTable = usesResourceTable
+		self.nextInChain = nextInChain
+	}
+
+	public func withWGPUStruct<R>(
+		_ lambda: (inout WGPURenderBundleEncoderResourceTable) -> R
+	) -> R {
+		return {
+			let usesResourceTable: WGPUBool = usesResourceTable ? 1 : 0
+			return {
+				if nextInChain == nil {
+					var wgpuStruct = WGPURenderBundleEncoderResourceTable(
+						chain: WGPUChainedStruct(next: nil, sType: sType),
+						usesResourceTable: usesResourceTable
+					)
+					return lambda(&wgpuStruct)
+				} else {
+					return nextInChain!.withNextInChain() { pointer in
+						var wgpuStruct = WGPURenderBundleEncoderResourceTable(
+							chain: WGPUChainedStruct(next: pointer, sType: sType),
+							usesResourceTable: usesResourceTable
+						)
+						return lambda(&wgpuStruct)
+					}
+				}
+			}()
+		}()
+	}
+}
+
 extension WGPURenderPassColorAttachment: RootStruct {
 }
 
@@ -4252,48 +4201,6 @@ public struct GPUShaderSourceWGSL: GPUChainedStruct {
 	}
 }
 
-extension WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor: ChainedStruct {
-}
-
-public struct GPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor: GPUChainedStruct {
-	public typealias WGPUType = WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor
-	public let sType: GPUSType = .sharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor
-	public var handle: UnsafeMutableRawPointer?
-	public var size: UInt64
-
-	public var nextInChain: (any GPUChainedStruct)? = nil
-
-	public init(handle: UnsafeMutableRawPointer?, size: UInt64 = 0, nextInChain: (any GPUChainedStruct)? = nil) {
-		self.handle = handle
-		self.size = size
-		self.nextInChain = nextInChain
-	}
-
-	public func withWGPUStruct<R>(
-		_ lambda: (inout WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor) -> R
-	) -> R {
-		return {
-			if nextInChain == nil {
-				var wgpuStruct = WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor(
-					chain: WGPUChainedStruct(next: nil, sType: sType),
-					handle: handle,
-					size: size
-				)
-				return lambda(&wgpuStruct)
-			} else {
-				return nextInChain!.withNextInChain() { pointer in
-					var wgpuStruct = WGPUSharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor(
-						chain: WGPUChainedStruct(next: pointer, sType: sType),
-						handle: handle,
-						size: size
-					)
-					return lambda(&wgpuStruct)
-				}
-			}
-		}()
-	}
-}
-
 extension WGPUSharedBufferMemoryBeginAccessDescriptor: RootStruct {
 }
 
@@ -4322,6 +4229,7 @@ public struct GPUSharedBufferMemoryBeginAccessDescriptor: GPURootStruct {
 		_ lambda: (inout WGPUSharedBufferMemoryBeginAccessDescriptor) -> R
 	) -> R {
 		let fenceCount = fences.count
+		let signaledValueCount = signaledValues?.count ?? 0
 		return {
 			let initialized: WGPUBool = initialized ? 1 : 0
 			return fences.unwrapWGPUObjectArray { fences in
@@ -4332,6 +4240,7 @@ public struct GPUSharedBufferMemoryBeginAccessDescriptor: GPURootStruct {
 							initialized: initialized,
 							fenceCount: fenceCount,
 							fences: fences,
+							signaledValueCount: signaledValueCount,
 							signaledValues: signaledValues
 						)
 						return lambda(&wgpuStruct)
@@ -4396,13 +4305,14 @@ public struct GPUSharedBufferMemoryEndAccessState: GPURootStruct, GPUStructWrapp
 	public init(wgpuStruct: WGPUSharedBufferMemoryEndAccessState) {
 		self.initialized = Bool(wgpuStruct.initialized != 0)
 		self.fences = wgpuStruct.fences.wrapWGPUArrayWithCount(wgpuStruct.fenceCount)
-		self.signaledValues = wgpuStruct.signaledValues.wrapArrayWithCount(wgpuStruct.fenceCount)
+		self.signaledValues = wgpuStruct.signaledValues.wrapArrayWithCount(wgpuStruct.signaledValueCount)
 	}
 
 	public func withWGPUStruct<R>(
 		_ lambda: (inout WGPUSharedBufferMemoryEndAccessState) -> R
 	) -> R {
 		let fenceCount = fences.count
+		let signaledValueCount = signaledValues?.count ?? 0
 		return {
 			let initialized: WGPUBool = initialized ? 1 : 0
 			return fences.unwrapWGPUObjectArray { fences in
@@ -4413,6 +4323,7 @@ public struct GPUSharedBufferMemoryEndAccessState: GPURootStruct, GPUStructWrapp
 							initialized: initialized,
 							fenceCount: fenceCount,
 							fences: fences,
+							signaledValueCount: signaledValueCount,
 							signaledValues: signaledValues
 						)
 						return lambda(&wgpuStruct)
@@ -4420,6 +4331,101 @@ public struct GPUSharedBufferMemoryEndAccessState: GPURootStruct, GPUStructWrapp
 				}
 			}
 		}()
+	}
+}
+
+extension WGPUSharedBufferMemoryFromWindowsHandleDescriptor: ChainedStruct {
+}
+
+public struct GPUSharedBufferMemoryFromWindowsHandleDescriptor: GPUChainedStruct {
+	public typealias WGPUType = WGPUSharedBufferMemoryFromWindowsHandleDescriptor
+	public let sType: GPUSType = .sharedBufferMemoryFromWindowsHandleDescriptor
+	public var handle: UnsafeMutableRawPointer?
+	public var size: UInt64
+
+	public var nextInChain: (any GPUChainedStruct)? = nil
+
+	public init(handle: UnsafeMutableRawPointer?, size: UInt64 = 0, nextInChain: (any GPUChainedStruct)? = nil) {
+		self.handle = handle
+		self.size = size
+		self.nextInChain = nextInChain
+	}
+
+	public func withWGPUStruct<R>(
+		_ lambda: (inout WGPUSharedBufferMemoryFromWindowsHandleDescriptor) -> R
+	) -> R {
+		return {
+			if nextInChain == nil {
+				var wgpuStruct = WGPUSharedBufferMemoryFromWindowsHandleDescriptor(
+					chain: WGPUChainedStruct(next: nil, sType: sType),
+					handle: handle,
+					size: size
+				)
+				return lambda(&wgpuStruct)
+			} else {
+				return nextInChain!.withNextInChain() { pointer in
+					var wgpuStruct = WGPUSharedBufferMemoryFromWindowsHandleDescriptor(
+						chain: WGPUChainedStruct(next: pointer, sType: sType),
+						handle: handle,
+						size: size
+					)
+					return lambda(&wgpuStruct)
+				}
+			}
+		}()
+	}
+}
+
+extension WGPUSharedBufferMemoryHostPointerDescriptor: ChainedStruct {
+}
+
+public struct GPUSharedBufferMemoryHostPointerDescriptor: GPUChainedStruct {
+	public typealias WGPUType = WGPUSharedBufferMemoryHostPointerDescriptor
+	public let sType: GPUSType = .sharedBufferMemoryHostPointerDescriptor
+	public var pointer: UnsafeMutableRawPointer?
+	public var size: UInt64
+	public var disposeCallbackInfo: GPUDisposeCallbackInfo
+
+	public var nextInChain: (any GPUChainedStruct)? = nil
+
+	public init(
+		pointer: UnsafeMutableRawPointer?,
+		size: UInt64 = 0,
+		disposeCallbackInfo: GPUDisposeCallbackInfo,
+		nextInChain: (any GPUChainedStruct)? = nil
+	) {
+		self.pointer = pointer
+		self.size = size
+		self.disposeCallbackInfo = disposeCallbackInfo
+		self.nextInChain = nextInChain
+	}
+
+	public func withWGPUStruct<R>(
+		_ lambda: (inout WGPUSharedBufferMemoryHostPointerDescriptor) -> R
+	) -> R {
+		return disposeCallbackInfo.withWGPUStruct { disposeCallbackInfo in
+			return {
+				if nextInChain == nil {
+					var wgpuStruct = WGPUSharedBufferMemoryHostPointerDescriptor(
+						chain: WGPUChainedStruct(next: nil, sType: sType),
+						pointer: pointer,
+						size: size,
+						disposeCallbackInfo: disposeCallbackInfo
+					)
+					return lambda(&wgpuStruct)
+				} else {
+					return nextInChain!.withNextInChain() { pointer in
+						var wgpuStruct = WGPUSharedBufferMemoryHostPointerDescriptor(
+							chain: WGPUChainedStruct(next: pointer, sType: sType),
+							pointer: pointer,
+							size: size,
+							disposeCallbackInfo: disposeCallbackInfo
+						)
+						return lambda(&wgpuStruct)
+					}
+				}
+			}()
+		}
 	}
 }
 
@@ -5286,6 +5292,7 @@ public struct GPUSharedTextureMemoryBeginAccessDescriptor: GPURootStruct {
 		_ lambda: (inout WGPUSharedTextureMemoryBeginAccessDescriptor) -> R
 	) -> R {
 		let fenceCount = fences.count
+		let signaledValueCount = signaledValues?.count ?? 0
 		return {
 			let concurrentRead: WGPUBool = concurrentRead ? 1 : 0
 			return {
@@ -5299,6 +5306,7 @@ public struct GPUSharedTextureMemoryBeginAccessDescriptor: GPURootStruct {
 								initialized: initialized,
 								fenceCount: fenceCount,
 								fences: fences,
+								signaledValueCount: signaledValueCount,
 								signaledValues: signaledValues
 							)
 							return lambda(&wgpuStruct)
@@ -5431,13 +5439,14 @@ public struct GPUSharedTextureMemoryEndAccessState: GPURootStruct, GPUStructWrap
 	public init(wgpuStruct: WGPUSharedTextureMemoryEndAccessState) {
 		self.initialized = Bool(wgpuStruct.initialized != 0)
 		self.fences = wgpuStruct.fences.wrapWGPUArrayWithCount(wgpuStruct.fenceCount)
-		self.signaledValues = wgpuStruct.signaledValues.wrapArrayWithCount(wgpuStruct.fenceCount)
+		self.signaledValues = wgpuStruct.signaledValues.wrapArrayWithCount(wgpuStruct.signaledValueCount)
 	}
 
 	public func withWGPUStruct<R>(
 		_ lambda: (inout WGPUSharedTextureMemoryEndAccessState) -> R
 	) -> R {
 		let fenceCount = fences.count
+		let signaledValueCount = signaledValues?.count ?? 0
 		return {
 			let initialized: WGPUBool = initialized ? 1 : 0
 			return fences.unwrapWGPUObjectArray { fences in
@@ -5448,6 +5457,7 @@ public struct GPUSharedTextureMemoryEndAccessState: GPURootStruct, GPUStructWrap
 							initialized: initialized,
 							fenceCount: fenceCount,
 							fences: fences,
+							signaledValueCount: signaledValueCount,
 							signaledValues: signaledValues
 						)
 						return lambda(&wgpuStruct)
@@ -5852,12 +5862,6 @@ public struct GPUStorageTextureBindingLayout: GPURootStruct {
 			return lambda(&wgpuStruct)
 		}
 	}
-}
-
-public typealias GPUSubgroupMatrixConfig = WGPUSubgroupMatrixConfig
-
-extension GPUSubgroupMatrixConfig: GPUSimpleStruct {
-	public typealias WGPUType = Self
 }
 
 extension WGPUSupportedWGSLLanguageFeatures: WGPUStruct {

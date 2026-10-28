@@ -48,6 +48,11 @@ public typealias GPUCallbackMode = WGPUCallbackMode
 extension WGPUCallbackMode: @retroactive RawRepresentable {
 }
 
+public typealias GPUCallbackStatus = WGPUCallbackStatus
+
+extension WGPUCallbackStatus: @retroactive RawRepresentable {
+}
+
 public typealias GPUColorSpacePrimariesDawn = WGPUColorSpacePrimariesDawn
 
 extension WGPUColorSpacePrimariesDawn: @retroactive RawRepresentable {

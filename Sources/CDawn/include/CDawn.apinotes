@@ -111,6 +111,10 @@ Enumerators:
   SwiftName: allowSpontaneous
 - Name: WGPUCallbackMode_WaitAnyOnly
   SwiftName: waitAnyOnly
+- Name: WGPUCallbackStatus_Error
+  SwiftName: error
+- Name: WGPUCallbackStatus_Success
+  SwiftName: success
 - Name: WGPUColorSpacePrimariesDawn_DisplayP3
   SwiftName: displayP3
 - Name: WGPUColorSpacePrimariesDawn_Rec2020
@@ -121,6 +125,8 @@ Enumerators:
   SwiftName: rec709
 - Name: WGPUColorSpacePrimariesDawn_SRGB
   SwiftName: sRGB
+- Name: WGPUColorSpaceTransferDawn_BT_1886
+  SwiftName: BT_1886
 - Name: WGPUColorSpaceTransferDawn_DisplayP3
   SwiftName: displayP3
 - Name: WGPUColorSpaceTransferDawn_HLG
@@ -271,12 +277,12 @@ Enumerators:
   SwiftName: BGRA8UnormStorage
 - Name: WGPUFeatureName_BufferMapExtendedUsages
   SwiftName: bufferMapExtendedUsages
+- Name: WGPUFeatureName_BufferMapWriteExtendedUsages
+  SwiftName: bufferMapWriteExtendedUsages
 - Name: WGPUFeatureName_ChromiumExperimentalSamplingResourceTable
   SwiftName: chromiumExperimentalSamplingResourceTable
 - Name: WGPUFeatureName_ChromiumExperimentalSubgroupMatrix
   SwiftName: chromiumExperimentalSubgroupMatrix
-- Name: WGPUFeatureName_ChromiumExperimentalSubgroupSizeControl
-  SwiftName: chromiumExperimentalSubgroupSizeControl
 - Name: WGPUFeatureName_ChromiumExperimentalTimestampQueryInsidePasses
   SwiftName: chromiumExperimentalTimestampQueryInsidePasses
 - Name: WGPUFeatureName_ClipDistances
@@ -285,6 +291,8 @@ Enumerators:
   SwiftName: coreFeaturesAndLimits
 - Name: WGPUFeatureName_D3D11MultithreadProtected
   SwiftName: D3D11MultithreadProtected
+- Name: WGPUFeatureName_DawnAllowUndefinedLoadStoreOp
+  SwiftName: dawnAllowUndefinedLoadStoreOp
 - Name: WGPUFeatureName_DawnDeviceAllocatorControl
   SwiftName: dawnDeviceAllocatorControl
 - Name: WGPUFeatureName_DawnDrmFormatCapabilities
@@ -299,8 +307,6 @@ Enumerators:
   SwiftName: dawnMultiPlanarFormats
 - Name: WGPUFeatureName_DawnNative
   SwiftName: dawnNative
-- Name: WGPUFeatureName_DawnNativeSpontaneousQueueEvents
-  SwiftName: dawnNativeSpontaneousQueueEvents
 - Name: WGPUFeatureName_DawnPartialLoadResolveTexture
   SwiftName: dawnPartialLoadResolveTexture
 - Name: WGPUFeatureName_DawnTexelCopyBufferRowAlignment
@@ -363,8 +369,10 @@ Enumerators:
   SwiftName: shaderModuleCompilationOptions
 - Name: WGPUFeatureName_SharedBufferMemoryD3D12Resource
   SwiftName: sharedBufferMemoryD3D12Resource
-- Name: WGPUFeatureName_SharedBufferMemoryD3D12SharedMemoryFileMappingHandle
-  SwiftName: sharedBufferMemoryD3D12SharedMemoryFileMappingHandle
+- Name: WGPUFeatureName_SharedBufferMemoryFromWindowsHandle
+  SwiftName: sharedBufferMemoryFromWindowsHandle
+- Name: WGPUFeatureName_SharedBufferMemoryHostPointer
+  SwiftName: sharedBufferMemoryHostPointer
 - Name: WGPUFeatureName_SharedFenceDXGISharedHandle
   SwiftName: sharedFenceDXGISharedHandle
 - Name: WGPUFeatureName_SharedFenceEGLSync
@@ -399,6 +407,8 @@ Enumerators:
   SwiftName: sharedTextureMemoryZirconHandle
 - Name: WGPUFeatureName_StaticSamplers
   SwiftName: staticSamplers
+- Name: WGPUFeatureName_SubgroupSizeControl
+  SwiftName: subgroupSizeControl
 - Name: WGPUFeatureName_Subgroups
   SwiftName: subgroups
 - Name: WGPUFeatureName_TextureComponentSwizzle
@@ -413,6 +423,8 @@ Enumerators:
   SwiftName: textureCompressionBCSliced3D
 - Name: WGPUFeatureName_TextureCompressionETC2
   SwiftName: textureCompressionETC2
+- Name: WGPUFeatureName_TextureCompressionUnaligned
+  SwiftName: textureCompressionUnaligned
 - Name: WGPUFeatureName_TextureFormatsTier1
   SwiftName: textureFormatsTier1
 - Name: WGPUFeatureName_TextureFormatsTier2
@@ -505,6 +517,8 @@ Enumerators:
   SwiftName: displayP3
 - Name: WGPUPredefinedColorSpace_DisplayP3Linear
   SwiftName: displayP3Linear
+- Name: WGPUPredefinedColorSpace_Rec2020Linear
+  SwiftName: rec2020Linear
 - Name: WGPUPredefinedColorSpace_SRGB
   SwiftName: sRGB
 - Name: WGPUPredefinedColorSpace_SRGBLinear
@@ -561,8 +575,6 @@ Enumerators:
   SwiftName: adapterPropertiesD3D
 - Name: WGPUSType_AdapterPropertiesDrm
   SwiftName: adapterPropertiesDrm
-- Name: WGPUSType_AdapterPropertiesExplicitComputeSubgroupSizeConfigs
-  SwiftName: adapterPropertiesExplicitComputeSubgroupSizeConfigs
 - Name: WGPUSType_AdapterPropertiesMemoryHeaps
   SwiftName: adapterPropertiesMemoryHeaps
 - Name: WGPUSType_AdapterPropertiesSubgroupMatrixConfigs
@@ -607,6 +619,8 @@ Enumerators:
   SwiftName: dawnRenderPassSampleCount
 - Name: WGPUSType_DawnShaderModuleSPIRVOptionsDescriptor
   SwiftName: dawnShaderModuleSPIRVOptionsDescriptor
+- Name: WGPUSType_DawnShaderSourceSPIRV
+  SwiftName: dawnShaderSourceSPIRV
 - Name: WGPUSType_DawnTexelCopyBufferRowAlignmentLimits
   SwiftName: dawnTexelCopyBufferRowAlignmentLimits
 - Name: WGPUSType_DawnTextureInternalUsageDescriptor
@@ -627,6 +641,8 @@ Enumerators:
   SwiftName: pipelineLayoutPixelLocalStorage
 - Name: WGPUSType_PipelineLayoutResourceTable
   SwiftName: pipelineLayoutResourceTable
+- Name: WGPUSType_RenderBundleEncoderResourceTable
+  SwiftName: renderBundleEncoderResourceTable
 - Name: WGPUSType_RenderPassDescriptorResolveRect
   SwiftName: renderPassDescriptorResolveRect
 - Name: WGPUSType_RenderPassMaxDrawCount
@@ -655,8 +671,10 @@ Enumerators:
   SwiftName: shaderSourceWGSL
 - Name: WGPUSType_SharedBufferMemoryD3D12ResourceDescriptor
   SwiftName: sharedBufferMemoryD3D12ResourceDescriptor
-- Name: WGPUSType_SharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor
-  SwiftName: sharedBufferMemoryD3D12SharedMemoryFileMappingHandleDescriptor
+- Name: WGPUSType_SharedBufferMemoryFromWindowsHandleDescriptor
+  SwiftName: sharedBufferMemoryFromWindowsHandleDescriptor
+- Name: WGPUSType_SharedBufferMemoryHostPointerDescriptor
+  SwiftName: sharedBufferMemoryHostPointerDescriptor
 - Name: WGPUSType_SharedFenceDXGISharedHandleDescriptor
   SwiftName: sharedFenceDXGISharedHandleDescriptor
 - Name: WGPUSType_SharedFenceDXGISharedHandleExportInfo
@@ -1147,6 +1165,8 @@ Enumerators:
   SwiftName: sint8x2
 - Name: WGPUVertexFormat_Sint8x4
   SwiftName: sint8x4
+- Name: WGPUVertexFormat_Snorm10_10_10_2
+  SwiftName: snorm10_10_10_2
 - Name: WGPUVertexFormat_Snorm16
   SwiftName: snorm16
 - Name: WGPUVertexFormat_Snorm16x2
@@ -1215,8 +1235,6 @@ Enumerators:
   SwiftName: chromiumTestingUnimplemented
 - Name: WGPUWGSLLanguageFeatureName_ChromiumTestingUnsafeExperimental
   SwiftName: chromiumTestingUnsafeExperimental
-- Name: WGPUWGSLLanguageFeatureName_FilteringParameters
-  SwiftName: filteringParameters
 - Name: WGPUWGSLLanguageFeatureName_FragmentDepth
   SwiftName: fragmentDepth
 - Name: WGPUWGSLLanguageFeatureName_ImmediateAddressSpace
@@ -1423,8 +1441,14 @@ Functions:
 - Name: wgpuDeviceCreateErrorBuffer
   SwiftName: WGPUDeviceImpl.createErrorBuffer(self:descriptor:)
   SwiftReturnOwnership: retained
+- Name: wgpuDeviceCreateErrorComputePipeline
+  SwiftName: WGPUDeviceImpl.createErrorComputePipeline(self:label:)
+  SwiftReturnOwnership: retained
 - Name: wgpuDeviceCreateErrorExternalTexture
   SwiftName: WGPUDeviceImpl.createErrorExternalTexture(self:)
+  SwiftReturnOwnership: retained
+- Name: wgpuDeviceCreateErrorRenderPipeline
+  SwiftName: WGPUDeviceImpl.createErrorRenderPipeline(self:label:)
   SwiftReturnOwnership: retained
 - Name: wgpuDeviceCreateErrorShaderModule
   SwiftName: WGPUDeviceImpl.createErrorShaderModule(self:descriptor:errorMessage:)
@@ -1604,8 +1628,6 @@ Functions:
   SwiftName: WGPURenderBundleEncoderImpl.setLabel(self:label:)
 - Name: wgpuRenderBundleEncoderSetPipeline
   SwiftName: WGPURenderBundleEncoderImpl.setPipeline(self:pipeline:)
-- Name: wgpuRenderBundleEncoderSetResourceTable
-  SwiftName: WGPURenderBundleEncoderImpl.setResourceTable(self:table:)
 - Name: wgpuRenderBundleEncoderSetVertexBuffer
   SwiftName: WGPURenderBundleEncoderImpl.setVertexBuffer(self:slot:buffer:offset:size:)
 - Name: wgpuRenderBundleRelease
@@ -1683,12 +1705,14 @@ Functions:
   SwiftName: WGPUResourceTableImpl.destroy(self:)
 - Name: wgpuResourceTableGetSize
   SwiftName: getter:WGPUResourceTableImpl.size(self:)
-- Name: wgpuResourceTableInsertBinding
-  SwiftName: WGPUResourceTableImpl.insertBinding(self:resource:)
+- Name: wgpuResourceTableInsert
+  SwiftName: WGPUResourceTableImpl.insert(self:resource:)
 - Name: wgpuResourceTableRelease
   SwiftName: WGPUResourceTableImpl.release(self:)
-- Name: wgpuResourceTableRemoveBinding
-  SwiftName: WGPUResourceTableImpl.removeBinding(self:slot:)
+- Name: wgpuResourceTableRemove
+  SwiftName: WGPUResourceTableImpl.remove(self:slot:)
+- Name: wgpuResourceTableSetLabel
+  SwiftName: WGPUResourceTableImpl.setLabel(self:label:)
 - Name: wgpuResourceTableUpdate
   SwiftName: WGPUResourceTableImpl.update(self:slot:resource:)
 - Name: wgpuSamplerAddRef
@@ -1797,16 +1821,12 @@ Functions:
   SwiftName: getter:WGPUTextureImpl.usage(self:)
 - Name: wgpuTextureGetWidth
   SwiftName: getter:WGPUTextureImpl.width(self:)
-- Name: wgpuTexturePin
-  SwiftName: WGPUTextureImpl.pin(self:usage:)
 - Name: wgpuTextureRelease
   SwiftName: WGPUTextureImpl.release(self:)
 - Name: wgpuTextureSetLabel
   SwiftName: WGPUTextureImpl.setLabel(self:label:)
 - Name: wgpuTextureSetOwnershipForMemoryDump
   SwiftName: WGPUTextureImpl.setOwnershipForMemoryDump(self:ownerGuid:)
-- Name: wgpuTextureUnpin
-  SwiftName: WGPUTextureImpl.unpin(self:)
 - Name: wgpuTextureViewAddRef
   SwiftName: WGPUTextureViewImpl.addRef(self:)
 - Name: wgpuTextureViewRelease
@@ -1926,6 +1946,8 @@ Tags:
 - Name: WGPUBufferMapState
   EnumExtensibility: closed
 - Name: WGPUCallbackMode
+  EnumExtensibility: closed
+- Name: WGPUCallbackStatus
   EnumExtensibility: closed
 - Name: WGPUColorSpacePrimariesDawn
   EnumExtensibility: closed

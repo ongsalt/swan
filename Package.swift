@@ -45,8 +45,8 @@ let dawnTarget: Target = {
 		return .binaryTarget(
 			name: "DawnLib",
 			url:
-				"https://github.com/adobe/swan/releases/download/dawn-chromium-stable-155.0.8059.26/dawn-chromium-stable-155.0.8059.26-release.artifactbundleindex",
-			checksum: "fe11ab0c8bb3afee3118803ebbf5a5ba3d53fe01f5a6cd1834add2be5be9466d"
+				"https://github.com/ongsalt/swan/releases/download/dawn-chromium-stable-156.0.8078.74/dawn-chromium-stable-156.0.8078.74-release.artifactbundleindex",
+			checksum: "66fe94cc6077721690bbeca6774e8a4e0a2a74937740b12ccee45d895dbdf69c"
 		)
 	}
 }()
@@ -276,8 +276,15 @@ let package = Package(
 			.target(
 				name: "RGFW",
 				path: "Demos/RGFW",
+				cSettings: [
+					.headerSearchPath("wayland")
+				],
 				swiftSettings: swiftSettings,
-				linkerSettings: asanLinkerSettings
+				linkerSettings: asanLinkerSettings + [
+					.linkedLibrary("wayland-client", .when(platforms: [.linux])),
+					.linkedLibrary("wayland-cursor", .when(platforms: [.linux])),
+					.linkedLibrary("xkbcommon", .when(platforms: [.linux])),
+				]
 			),
 			.target(
 				name: "DemoUtils",
