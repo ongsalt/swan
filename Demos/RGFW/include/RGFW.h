@@ -7353,6 +7353,7 @@ Wayland TODO: (out of date)
 #include <linux/kd.h>
 #include <wayland-cursor.h>
 #include <fcntl.h>
+#include <poll.h>
 
 struct wl_display* RGFW_getDisplay_Wayland(void) { return _RGFW->wl_display; }
 struct wl_surface* RGFW_window_getWindow_Wayland(RGFW_window* win) { return win->src.surface; }
@@ -8460,12 +8461,21 @@ void RGFW_FUNC(RGFW_pollEvents) (void) {
 		}
 	}
 
-	/* read the events; if empty this reads from the */
-	/* wayland file descriptor */
-	if (wl_display_dispatch(_RGFW->wl_display) == -1) {
-		return;
+	/* read any available events without blocking (wl_display_dispatch blocks when the queue is empty) */
+	while (wl_display_prepare_read(_RGFW->wl_display) != 0) {
+		if (wl_display_dispatch_pending(_RGFW->wl_display) == -1) {
+			return;
+		}
 	}
 
+	struct pollfd fd = { wl_display_get_fd(_RGFW->wl_display), POLLIN, 0 };
+	if (poll(&fd, 1, 0) > 0) {
+		wl_display_read_events(_RGFW->wl_display);
+	} else {
+		wl_display_cancel_read(_RGFW->wl_display);
+	}
+
+	wl_display_dispatch_pending(_RGFW->wl_display);
 }
 
 void RGFW_FUNC(RGFW_window_move) (RGFW_window* win, i32 x, i32 y) {

@@ -1,4 +1,7 @@
 #define RGFW_IMPORT
+#ifdef __linux__
+#define RGFW_WAYLAND
+#endif
 #include "RGFW.h"
 
 #ifdef _WIN32
